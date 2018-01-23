@@ -1,6 +1,10 @@
 @import "vendor";
 
 .WidgetPage {
+  &__content {
+    margin: 0 auto;
+    text-align: center;
+  }
 
   .Tab {
     & > div > div {
