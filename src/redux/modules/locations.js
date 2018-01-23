@@ -67,7 +67,7 @@ export const addLocationAction = (place) => (dispatch) => {
             });
         })
         .catch(err => {
-            console.error(`editCompanyAction failed! ${err}`);
+            console.error(`Fetch weather failed! ${err}`);
 
             dispatch({
                 type: MAP_LOCATION_WEATHER_FAILED,
