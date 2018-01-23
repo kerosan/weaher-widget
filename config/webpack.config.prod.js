@@ -149,7 +149,7 @@ module.exports = {
             include: paths.appSrc,
             loader: require.resolve('babel-loader'),
             options: {
-              
+                plugins: ['transform-decorators-legacy'],
               compact: true,
             },
           },
@@ -212,6 +212,37 @@ module.exports = {
             ),
             // Note: this won't work without `new ExtractTextPlugin()` in `plugins`.
           },
+            {
+                test: /\.scss$/,
+                include: paths.appSrc,
+                loaders: ExtractTextPlugin.extract({
+                    fallback: {
+                        loader: require.resolve("style-loader"),
+                    },
+                    use: [
+                        {
+                            loader: require.resolve("css-loader"),
+                            options: {
+                                sourceMap: true,
+                            },
+                        },
+                        {
+                            loader: require.resolve("resolve-url-loader"),
+                            options: {
+                                sourceMap: true,
+                            }
+                        },
+                        {
+                            loader: require.resolve("sass-loader"),
+                            options: {
+                                sourceMap: true,
+                                sourceMapContents: true,
+                                includePaths: ["src/style"]
+                            }
+                        }
+                    ],
+                })
+            },
           // "file" loader makes sure assets end up in the `build` folder.
           // When you `import` an asset, you get its filename.
           // This loader doesn't use a "test" so it will catch all modules
@@ -337,6 +368,7 @@ module.exports = {
     fs: 'empty',
     net: 'empty',
     tls: 'empty',
+    module: 'empty',
     child_process: 'empty',
   },
 };

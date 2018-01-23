@@ -4,9 +4,9 @@ import {MuiThemeProvider} from "material-ui";
 
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'react-router-redux'
-import store, { history } from './store'
+import store, { history } from '../../redux/store'
 import {Route} from "react-router-dom";
-import {WidgetPage} from "./containers/WidgetPage/WidgetPage";
+import {WidgetPage} from "../../containers/WidgetPage/WidgetPage";
 
 
 class App extends Component {
