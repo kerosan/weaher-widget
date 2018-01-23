@@ -4,9 +4,10 @@ import {connect} from "react-redux";
 import {SvgIcon, Tab, Tabs, Paper} from "material-ui";
 import PropTypes from 'prop-types';
 import {LocationInput} from "../../components/LocationInput/LocationInput";
-import {addLocationAction, deleteLocationAction} from "../../redux/modules/locations";
+import {addLocationAction, deleteLocationAction, setActiveTab} from "../../redux/modules/locations";
 import block from 'bem-cn-lite';
 import {Col, Form, Row} from "reactstrap";
+import _ from "lodash";
 
 const b = block('WidgetPage');
 
@@ -23,7 +24,8 @@ const CloseIcon = (props) => (
     locations: state.locations
 }), {
     addLocationAction,
-    deleteLocationAction
+    deleteLocationAction,
+    setActiveTab
 })
 export class WidgetPage extends Component {
 
@@ -42,7 +44,7 @@ export class WidgetPage extends Component {
     render() {
         const {locations} = this.props;
 
-
+        console.log('===', locations.places,_.find(locations.places, {selected: false}));
         return <div className={b()}>
             <Form onSubmit={this.onSubmit}>
                 <Row style={{padding: 10}}>
@@ -55,7 +57,7 @@ export class WidgetPage extends Component {
                 </Row>
             </Form>
 
-            <Tabs>
+            <Tabs value={_.indexOf(locations.places, locations.selected)}>
                 {
                     locations.places.map((tab, key) => {
                         if (!tab.weather) {
@@ -64,8 +66,10 @@ export class WidgetPage extends Component {
 
                         return <Tab
                             key={key}
+                            value={key}
                             icon={<CloseIcon disabled={key < 2} onClick={() => this.closeTab(tab)}/>}
                             className={'Tab'}
+                            onActive={() => this.props.setActiveTab(tab)}
                             label={tab.formatted_address}>
                             <Paper className={b('content')}>
                                 <br/>
