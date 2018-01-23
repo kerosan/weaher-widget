@@ -1,7 +1,7 @@
 import './WidgetPage.scss';
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {SvgIcon, Tab, Tabs} from "material-ui";
+import {SvgIcon, Tab, Tabs, Paper} from "material-ui";
 import PropTypes from 'prop-types';
 import {LocationInput} from "../../components/LocationInput/LocationInput";
 import {addLocationAction, deleteLocationAction} from "../../redux/modules/locations";
@@ -67,14 +67,16 @@ export class WidgetPage extends Component {
                             icon={<CloseIcon disabled={key < 2} onClick={() => this.closeTab(tab)}/>}
                             className={'Tab'}
                             label={tab.formatted_address}>
-                            <div className={b('content')}>
+                            <Paper className={b('content')}>
                                 <br/>
                                 <br/>
                                 {`Temperature: ${tab.weather.temp} °C`}
                                 <br/>
                                 <br/>
                                 {`Pressure: ${tab.weather.pressure} Pa`}
-                            </div>
+                                <br/>
+                                <br/>
+                            </Paper>
                         </Tab>
                     })
 
