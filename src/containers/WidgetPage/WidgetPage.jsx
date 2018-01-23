@@ -7,7 +7,6 @@ import {LocationInput} from "../../components/LocationInput/LocationInput";
 import {addLocationAction, deleteLocationAction, setActiveTab} from "../../redux/modules/locations";
 import block from 'bem-cn-lite';
 import {Col, Form, Row} from "reactstrap";
-import _ from "lodash";
 
 const b = block('WidgetPage');
 
@@ -44,7 +43,6 @@ export class WidgetPage extends Component {
     render() {
         const {locations} = this.props;
 
-        console.log('===', locations.places,_.find(locations.places, {selected: false}));
         return <div className={b()}>
             <Form onSubmit={this.onSubmit}>
                 <Row style={{padding: 10}}>
@@ -57,7 +55,7 @@ export class WidgetPage extends Component {
                 </Row>
             </Form>
 
-            <Tabs value={_.indexOf(locations.places, locations.selected)}>
+            <Tabs value={locations.selected}>
                 {
                     locations.places.map((tab, key) => {
                         if (!tab.weather) {
@@ -69,7 +67,7 @@ export class WidgetPage extends Component {
                             value={key}
                             icon={<CloseIcon disabled={key < 2} onClick={() => this.closeTab(tab)}/>}
                             className={'Tab'}
-                            onActive={() => this.props.setActiveTab(tab)}
+                            onActive={() => this.setActive(tab)}
                             label={tab.formatted_address}>
                             <Paper className={b('content')}>
                                 <br/>
@@ -92,6 +90,10 @@ export class WidgetPage extends Component {
     onSubmit = (event) => {
         event.preventDefault();
     };
+
+    setActive(tab) {
+        this.props.setActiveTab(tab)
+    }
 
     closeTab(tab) {
         this.props.deleteLocationAction(tab);

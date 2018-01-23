@@ -1,10 +1,10 @@
 import typeToReducer from "type-to-reducer";
 
-const MAP_LOCATION_WEATHER_FETCH = 'MAP_LOCATION_WEATHER_FETCH';
-const MAP_LOCATION_WEATHER_SUCCESS = 'MAP_LOCATION_WEATHER_SUCCESS';
-const MAP_LOCATION_WEATHER_FAILED = 'MAP_LOCATION_WEATHER_FAILED';
-const MAP_LOCATION_WEATHER_DELETE = 'MAP_LOCATION_WEATHER_DELETE';
-const MAP_LOCATION_WEATHER_SWITCH = 'MAP_LOCATION_WEATHER_SWITCH';
+export const MAP_LOCATION_WEATHER_FETCH = 'MAP_LOCATION_WEATHER_FETCH';
+export const MAP_LOCATION_WEATHER_SUCCESS = 'MAP_LOCATION_WEATHER_SUCCESS';
+export const MAP_LOCATION_WEATHER_FAILED = 'MAP_LOCATION_WEATHER_FAILED';
+export const MAP_LOCATION_WEATHER_DELETE = 'MAP_LOCATION_WEATHER_DELETE';
+export const MAP_LOCATION_WEATHER_SWITCH = 'MAP_LOCATION_WEATHER_SWITCH';
 
 const initialState = {
     places: [
@@ -12,21 +12,16 @@ const initialState = {
             formatted_address: 'New York, NY, USA',
             lat: 40.7127753,
             lon: -74.0059728,
-            weather: {temp: 0, pressure: 100},
+            weather: {temp: 10, pressure: 1000},
         },
         {
             formatted_address: 'Toronto, OP, Canada',
             lat: 43.653226,
             lon: -79.38318429999998,
-            weather: {temp: 0, pressure: 100},
+            weather: {temp: 10, pressure: 1000},
         }
     ],
-    selected: {
-        formatted_address: 'New York, NY, USA',
-        lat: 40.7127753,
-        lon: -74.0059728,
-        weather: {temp: 0, pressure: 100},
-    }
+    selected: 0
 };
 
 const locations = typeToReducer({
@@ -36,11 +31,11 @@ const locations = typeToReducer({
     },
     MAP_LOCATION_WEATHER_SUCCESS: (state, action) => {
         let places = state.places.slice();
-        let selected;
+        let selected = null;
         for (let place of places) {
             if (place.formatted_address === action.formatted_address) {
+                selected = places.indexOf(place);
                 place.weather = {...action.weather};
-                selected = place;
                 break;
             }
         }
@@ -50,32 +45,29 @@ const locations = typeToReducer({
         let index = state.places.indexOf(action.payload);
         let places = state.places.slice();
         places.splice(index, 1);
-        return {...state, places};
+        return {...state, places, selected: index - 1};
     },
     MAP_LOCATION_WEATHER_SWITCH: (state, action) => {
-
-        return {...state, selected: action.payload};
+        return {...state, selected: state.places.indexOf(action.payload)};
     }
 }, initialState);
 
-export const addLocationAction = (place) => (dispatch) => {
+export const addLocationAction = ({formatted_address, lat, lon}) => (dispatch) => {
     dispatch({
         type: MAP_LOCATION_WEATHER_FETCH,
         payload: {
-            formatted_address: place['formatted_address'],
-            lat: place.lat,
-            lon: place.lon,
-
+            formatted_address,
+            lat,
+            lon,
         }
     });
 
-    fetch(`https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${place.lat}&lon=${place.lon}&APPID=3079ec03ae1ffcfd051beb2367f96702`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${lat}&lon=${lon}&APPID=3079ec03ae1ffcfd051beb2367f96702`)
         .then(res => res.json())
         .then(res => {
-            console.log(res);
             dispatch({
                 type: MAP_LOCATION_WEATHER_SUCCESS,
-                formatted_address: place['formatted_address'],
+                formatted_address,
                 weather: res.main,
             });
         })
@@ -89,18 +81,17 @@ export const addLocationAction = (place) => (dispatch) => {
         })
 };
 
-export const deleteLocationAction = (tab) => {
-
+export const deleteLocationAction = (payload) => {
     return {
         type: MAP_LOCATION_WEATHER_DELETE,
-        payload: tab
+        payload
     };
 };
 
-export const setActiveTab = (tab) => {
+export const setActiveTab = (payload) => {
     return {
         type: MAP_LOCATION_WEATHER_SWITCH,
-        payload: tab
+        payload
     };
 };
 

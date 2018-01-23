@@ -7,7 +7,7 @@ import {createLogger} from "redux-logger";
 
 import * as storage from 'redux-storage'
 import createEngine from 'redux-storage-engine-localstorage';
-
+import {MAP_LOCATION_WEATHER_FETCH} from "../redux/modules/locations"
 
 export const history = createHistory();
 
@@ -23,12 +23,11 @@ if (process.env.NODE_ENV === 'development') {
 
 const reducer = storage.reducer(reducers);
 const engine = createEngine('weather');
-const middleware = storage.createMiddleware(engine);
-const createStoreWithMiddleware = applyMiddleware(middleware,thunk, createLogger(), routerMiddleware(history))(createStore);
+const middleware = storage.createMiddleware(engine, [MAP_LOCATION_WEATHER_FETCH]);
+const createStoreWithMiddleware = applyMiddleware(middleware, thunk, createLogger(), routerMiddleware(history))(createStore);
 const store = createStoreWithMiddleware(reducer);
 
 const load = storage.createLoader(engine);
-load(store);
 
 load(store)
     .then((newState) => console.log('Loaded state:', newState))
