@@ -9,12 +9,14 @@ export const MAP_LOCATION_WEATHER_SWITCH = 'MAP_LOCATION_WEATHER_SWITCH';
 const initialState = {
     places: [
         {
+            key: 0,
             formatted_address: 'New York, NY, USA',
             lat: 40.7127753,
             lon: -74.0059728,
             weather: {temp: 10, pressure: 1000},
         },
         {
+            key: 1,
             formatted_address: 'Toronto, OP, Canada',
             lat: 43.653226,
             lon: -79.38318429999998,
@@ -31,15 +33,13 @@ const locations = typeToReducer({
     },
     MAP_LOCATION_WEATHER_SUCCESS: (state, action) => {
         let places = state.places.slice();
-        let selected = null;
         for (let place of places) {
             if (place.formatted_address === action.formatted_address) {
-                selected = places.indexOf(place);
                 place.weather = {...action.weather};
                 break;
             }
         }
-        return {...state, places: places, selected};
+        return {...state, places: places};
     },
     MAP_LOCATION_WEATHER_DELETE: (state, action) => {
         let index = state.places.indexOf(action.payload);

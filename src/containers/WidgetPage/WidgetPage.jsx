@@ -64,7 +64,7 @@ export class WidgetPage extends Component {
 
                         return <Tab
                             key={key}
-                            value={key}
+                            value={tab.key}
                             icon={<CloseIcon disabled={key < 2} onClick={() => this.closeTab(tab)}/>}
                             className={'Tab'}
                             onActive={() => this.setActive(tab)}
