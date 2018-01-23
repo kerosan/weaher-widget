@@ -56,7 +56,7 @@ export const addLocationAction = (place) => (dispatch) => {
         }
     });
 
-    fetch(`http://api.openweathermap.org/data/2.5/weather?units=metric&lat=${place.lat}&lon=${place.lon}&APPID=3079ec03ae1ffcfd051beb2367f96702`)
+    fetch(`https://api.openweathermap.org/data/2.5/weather?units=metric&lat=${place.lat}&lon=${place.lon}&APPID=3079ec03ae1ffcfd051beb2367f96702`)
         .then(res => res.json())
         .then(res => {
             console.log(res);
