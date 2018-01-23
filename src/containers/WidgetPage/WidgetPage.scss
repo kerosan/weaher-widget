@@ -1,0 +1,15 @@
+@import "vendor";
+
+.WidgetPage {
+
+  .Tab {
+    & > div > div {
+      padding: 0 20px;
+      display: flex;
+      flex-direction: row !important;
+      flex-flow: row-reverse !important;
+      justify-content: space-between !important;
+    }
+
+  }
+}
