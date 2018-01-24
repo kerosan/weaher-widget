@@ -36,19 +36,20 @@ const locations = typeToReducer({
         for (let place of places) {
             if (place.formatted_address === action.formatted_address) {
                 place.weather = {...action.weather};
+                place.key = places.indexOf(place);
                 break;
             }
         }
-        return {...state, places: places};
+        return {...state, places};
     },
     MAP_LOCATION_WEATHER_DELETE: (state, action) => {
         let index = state.places.indexOf(action.payload);
         let places = state.places.slice();
         places.splice(index, 1);
-        return {...state, places, selected: index - 1};
+        return {...state, places, selected: state.places[index - 1].key};
     },
     MAP_LOCATION_WEATHER_SWITCH: (state, action) => {
-        return {...state, selected: state.places.indexOf(action.payload)};
+        return {...state, selected: action.key};
     }
 }, initialState);
 
@@ -88,10 +89,11 @@ export const deleteLocationAction = (payload) => {
     };
 };
 
-export const setActiveTab = (payload) => {
+export const setActiveTab = (payload, key) => {
     return {
         type: MAP_LOCATION_WEATHER_SWITCH,
-        payload
+        payload,
+        key
     };
 };
 

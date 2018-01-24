@@ -55,7 +55,7 @@ export class WidgetPage extends Component {
                 </Row>
             </Form>
 
-            <Tabs value={locations.selected}>
+            <Tabs value={`${locations.selected}`}>
                 {
                     locations.places.map((tab, key) => {
                         if (!tab.weather) {
@@ -64,10 +64,10 @@ export class WidgetPage extends Component {
 
                         return <Tab
                             key={key}
-                            value={tab.key}
+                            value={`${key}`}
                             icon={<CloseIcon disabled={key < 2} onClick={() => this.closeTab(tab)}/>}
                             className={'Tab'}
-                            onActive={() => this.setActive(tab)}
+                            onActive={() => this.setActive(tab,key)}
                             label={tab.formatted_address}>
                             <Paper className={b('content')}>
                                 <br/>
@@ -91,8 +91,8 @@ export class WidgetPage extends Component {
         event.preventDefault();
     };
 
-    setActive(tab) {
-        this.props.setActiveTab(tab)
+    setActive(tab,key) {
+        this.props.setActiveTab(tab,key)
     }
 
     closeTab(tab) {
